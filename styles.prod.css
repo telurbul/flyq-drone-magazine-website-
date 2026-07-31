@@ -1,0 +1,332 @@
+/* =========================================================================
+   VCD — product page styles
+
+   Loaded ALONGSIDE styles.css on product.html:
+     <link rel="stylesheet" href="styles.css">
+     <link rel="stylesheet" href="styles.prod.css">
+
+   The :root block below is an EXACT copy of styles.css's tokens (same
+   names, same values — nothing changed). It's duplicated on purpose so
+   this file is self-contained and product.html renders correctly with
+   the right palette even by itself. If the palette ever changes, update
+   both :root blocks together.
+   ========================================================================= */
+:root{
+  --ink:            #131416;   /* carousel + product panels */
+  --ink-soft:       #1b1d20;
+  --header:         rgba(30, 45, 80, 0.4);  /* header teal */
+  --header-deep:    #05131b;  /* pill buttons inside header */
+    --grad-1: #4b5b74;    /* body gradient, up */
+    --grad-2: #6d7aaf;
+    --grad-3: #7186aabf;
+    --grad-4: #4a566a;  /* body gradient, bottom */
+  --footer-1:       #1A1F26;
+  --footer-2:       #2a2c30;
+  --accent:         #e73a3b;   /* signal red, from the logo */
+  --accent-deep:    #a8262a;
+  --arrow:          #beb3b4;
+  --paper:          #f6efec;
+  --paper-dim:      #cdb9b8;
+  --line:           rgba(246,239,236,.14);
+
+  --font-display: 'Unbounded', 'Segoe UI', sans-serif;
+  --font-body:    'Golos Text', 'Segoe UI', sans-serif;
+
+  --radius-pill: 999px;
+  --radius-card: 22px;
+  --radius-sm:   10px;
+
+  --container: 1280px;
+  --pad-inline: clamp(1.25rem, 4vw, 3rem);
+
+  --header-h: 84px;
+  --ease-out: cubic-bezier(.2,1,.3,1);
+}
+
+
+
+/* =========================================================================
+   Header back-button variant ("На головну" replaces the SIGN UP/LOGIN pair)
+   ========================================================================= */
+.btn--back{ display:inline-flex; align-items:center; gap:.5rem; }
+.btn--back .icon{ transform:scaleX(-1); }
+
+
+.drone-bg{
+  position:absolute;
+  top:0; left:0; width:100%;
+  z-index:0;
+  overflow:hidden;
+  pointer-events:none;
+}
+.drone-bg__item{
+  position:absolute;
+  opacity:.4;
+  filter:drop-shadow(0 12px 20px rgba(0,0,0,.25));
+  will-change:transform;
+}
+.drone-bg__item:nth-child(1){ width:420px; top:7%;  left:-6%; }
+.drone-bg__item:nth-child(2){ width:380px; top:32%; right:-8%; }
+.drone-bg__item:nth-child(3){ width:280px; top:56%; left:2%; }
+.drone-bg__item:nth-child(4){ width:320px; top:88%; right:10%; }
+
+main,
+.site-footer{ position:relative; z-index:1; }
+
+@media (max-width:720px){
+  .drone-bg__item{ opacity:.28; }
+  .drone-bg__item:nth-child(1){ width:230px; }
+  .drone-bg__item:nth-child(2){ width:210px; }
+  .drone-bg__item:nth-child(3){ width:160px; }
+  .drone-bg__item:nth-child(4){ width:190px; }
+}
+
+
+
+
+
+
+
+
+/* =========================================================================
+   Hero — gallery + buy box
+   ========================================================================= */
+.product-hero{
+  max-width:var(--container);
+  margin:0 auto;
+  padding: clamp(0.5rem, 1.5vw, 1rem) var(--pad-inline) 0;
+  display:grid;
+  grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+  gap: clamp(1rem, 2vw, 1.5rem);
+  align-items:start;
+}
+@media (max-width: 860px){
+  .product-hero{ grid-template-columns: 1fr; }
+}
+
+.product-hero__gallery{ position:relative; }
+.gallery__frame{
+  position:relative;
+  aspect-ratio:5/3;
+  max-height:380px;
+  background:var(--ink);
+  border-radius:var(--radius-card);
+  overflow:hidden;
+  display:grid;
+  place-items:center;
+}
+/* Reticle corners stay on across every view — it's the same HUD-lock motif
+   used on the homepage product cards, just always-on instead of hover-only. */
+.gallery__frame .corner{ opacity:1; transform:translate(0,0); }
+
+.gallery__glyph{ width:44%; height:44%; color:rgba(246,239,236,.55); transition:opacity .25s ease; }
+.gallery__photo{
+  position:absolute; inset:0;
+  background-size:cover;
+  background-position:center;
+  opacity:0;
+  transition:opacity .25s ease;
+}
+.gallery__frame--photo .gallery__photo{ opacity:1; }
+.gallery__frame--photo .gallery__glyph{ opacity:0; }
+
+.gallery__frame--radar{
+  background:
+    radial-gradient(circle at 50% 50%, transparent 30%, rgba(231,58,59,.14) 30.5% 31%, transparent 31.5%),
+    radial-gradient(circle at 50% 50%, transparent 44%, rgba(246,239,236,.10) 44.5% 45%, transparent 45.5%),
+    var(--ink);
+}
+
+.gallery__more-msg{
+  position:absolute; inset:0;
+  display:grid; place-items:center;
+  text-align:center;
+  font-family:var(--font-display);
+  font-weight:600;
+  font-size:clamp(0.9rem, 2vw, 1.3rem);
+  color:var(--paper-dim);
+  padding:1.5rem;
+  opacity:0;
+  transition:opacity .3s ease;
+  pointer-events:none;
+}
+.gallery__frame--more .gallery__more-msg{ opacity:1; }
+.gallery__frame--more .gallery__glyph{ opacity:0; }
+.gallery__frame--more .gallery__photo{ opacity:0; }
+
+.gallery__arrow{
+  position:absolute; top:50%; transform:translateY(-50%);
+  display:grid; place-items:center;
+  width:46px; height:46px;
+  color:var(--paper);
+  background:rgba(19,20,22,.45);
+  border-radius:50%;
+  transition: background .2s, transform .15s var(--ease-out);
+}
+.gallery__arrow[disabled]{ opacity:.25; pointer-events:none; }
+.gallery__arrow--prev{ left:12px; }
+.gallery__arrow--prev svg{ transform:scaleX(-1); }
+.gallery__arrow--next{ right:12px; }
+.gallery__arrow:hover{ background:rgba(231,58,59,.7); }
+.gallery__arrow:active{ transform:translateY(-50%) scale(.92); }
+
+.gallery__dots{
+  position:absolute; left:0; right:0; bottom:14px;
+  display:flex; justify-content:center; gap:.5rem;
+}
+.gallery__dots button{
+  width:7px; height:7px; border-radius:50%;
+  background:rgba(246,239,236,.35);
+  transition:background .2s, transform .2s var(--ease-out);
+}
+.gallery__dots button[aria-selected="true"]{ background:var(--accent); transform:scale(1.3); }
+
+.product-hero__name{
+  display:flex; align-items:center; gap:.75rem;
+  font-family:var(--font-display);
+  font-weight:700;
+  font-size:clamp(1.5rem, 3.6vw, 2.1rem);
+}
+.product-hero__tag{
+  display:inline-block;
+  margin: .6rem 0 1.25rem;
+  font-size:.78rem;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  color:var(--accent);
+}
+.product-hero__desc{
+  line-height:1.6;
+  margin-bottom:1rem;
+  max-width:56ch;
+  color:rgba(246,239,236,.9);
+}
+
+.product-buy{
+  display:flex; align-items:center; gap:1.25rem; flex-wrap:wrap;
+  margin: 1.5rem 0 1rem;
+}
+.product-buy__price{
+  font-family:var(--font-display);
+  font-weight:700;
+  font-size:clamp(1.3rem, 2.6vw, 1.6rem);
+  background:var(--ink);
+  padding:.75rem 1.25rem;
+  border-radius:var(--radius-sm);
+}
+.qty-stepper{
+  display:flex; align-items:center;
+  background:var(--ink);
+  border-radius:var(--radius-sm);
+  overflow:hidden;
+}
+.qty-stepper__btn{
+  width:44px; height:52px;
+  font-size:1.15rem;
+  color:var(--paper);
+  transition: background .15s;
+}
+.qty-stepper__btn:hover{ background:rgba(231,58,59,.25); }
+.qty-stepper__btn:disabled{ opacity:.3; pointer-events:none; }
+.qty-stepper__value{ min-width:2.5rem; text-align:center; font-weight:600; }
+
+.btn--order{
+  display:block;
+  width:100%;
+  text-align:center;
+  background:var(--accent);
+  color:var(--paper);
+  font-family:var(--font-display);
+  font-weight:700;
+  letter-spacing:.03em;
+  padding:1rem;
+  border-radius:var(--radius-sm);
+  transition: background .2s, transform .15s var(--ease-out);
+}
+.btn--order:hover{ background:var(--accent-deep); }
+.btn--order:active{ transform:scale(.98); }
+.btn--order.is-confirmed{ background:#2f7d4f; }
+
+/* =========================================================================
+   Secondary description block
+   ========================================================================= */
+.product-extra{
+  max-width:var(--container);
+  margin:0 auto;
+  padding: clamp(1.5rem, 3vw, 2.5rem) var(--pad-inline) 0;
+}
+.product-extra__heading{
+  font-family:var(--font-display);
+  font-weight:700;
+  font-size:clamp(1.2rem, 2.6vw, 1.6rem);
+  margin-bottom:.85rem;
+}
+.product-extra__text{
+  max-width:72ch;
+  line-height:1.65;
+  color:rgba(246,239,236,.85);
+}
+
+/* =========================================================================
+   Video player (custom controls over a real <video>)
+   ========================================================================= */
+.product-video{
+  max-width:var(--container);
+  margin:0 auto;
+  padding: clamp(1.5rem, 3vw, 2.5rem) var(--pad-inline) 0;
+}
+.video-player{
+  position:relative;
+  aspect-ratio:16/9;
+  background:var(--ink);
+  border-radius:var(--radius-card);
+  overflow:hidden;
+}
+.video-player video{ width:100%; height:100%; object-fit:cover; display:block; }
+.video-player__play{
+  position:absolute; inset:0; margin:auto;
+  width:clamp(64px,9vw,88px); height:clamp(64px,9vw,88px);
+  display:grid; place-items:center;
+  color:var(--paper);
+  background:rgba(19,20,22,.4);
+  border:1px solid rgba(246,239,236,.25);
+  border-radius:50%;
+  transition: transform .2s var(--ease-out), background .2s, opacity .2s;
+}
+.video-player__play:hover{ transform:scale(1.06); background:rgba(231,58,59,.55); }
+.video-player__play .icon--pause{ display:none; }
+.video-player.is-playing .icon--play{ display:none; }
+.video-player.is-playing .icon--pause{ display:block; }
+.video-player.is-playing .video-player__play{ opacity:0; }
+.video-player.is-playing .video-player__play:hover{ opacity:1; }
+.video-player.is-empty .video-player__play{ opacity:.5; pointer-events:none; }
+
+.video-player__track{
+  position:absolute; left:0; right:0; bottom:0;
+  padding: 14px 4px 4px;
+  cursor:pointer;
+}
+.video-player.is-empty .video-player__track{ pointer-events:none; }
+.video-player__bar{ position:relative; height:5px; border-radius:3px; background:rgba(246,239,236,.2); }
+.video-player__progress{ position:absolute; inset:0; width:0%; background:var(--accent); border-radius:3px; }
+.video-player__handle{
+  position:absolute; top:50%; left:0%;
+  width:11px; height:11px;
+  background:var(--paper);
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+  box-shadow:0 0 0 3px rgba(19,20,22,.5);
+}
+.video-player__notice{
+  position:absolute; left:50%; bottom:26px;
+  transform:translateX(-50%);
+  font-size:.78rem;
+  color:var(--paper-dim);
+  background:rgba(19,20,22,.75);
+  padding:.4rem .9rem;
+  border-radius:var(--radius-pill);
+  opacity:0; pointer-events:none;
+  transition:opacity .2s;
+  white-space:nowrap;
+}
+.video-player.is-empty .video-player__notice{ opacity:1; }

@@ -1,0 +1,82 @@
+/* =========================================================================
+   Cart page — styles
+   ========================================================================= */
+
+.cart-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: 8px;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border-bottom: 1px solid var(--gold);
+}
+
+.cart-item img {
+  width: 120px;
+  height: auto;
+  margin-right: 20px;
+}
+
+.cart-name {
+  flex: 1;
+  margin-left: 10px;
+}
+
+.cart-price {
+  font-weight: bold;
+  margin-right: 15px;
+}
+
+.remove-btn {
+  padding: 6px 12px;
+  background: var(--gold);
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.cart-actions {
+  text-align: right;
+  margin-top: 20px;
+}
+
+.cart-actions button {
+  padding: 10px 20px;
+  background: var(--gold);
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+/* Банер */
+.banner {
+  display: none;
+  position: fixed;
+  top: 30%;
+  left: 10%;
+  transform: translate(-50%, -50%);
+  background: #e0f0ff;
+  color: #333;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  text-align: center;
+  z-index: 1000;
+}
+
+.banner button {
+  margin-top: 15px;
+  padding: 8px 16px;
+  background: var(--gold);
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
